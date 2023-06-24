@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User SignUp</title>
+    <link rel="stylesheet" href="./styles/user.signup.css">
+</head>
+<body>
+   <nav>
+    <ul>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="userSignup.html">SignUp</a></li>
+    </ul>
+   </nav>
+
+
+    <div id="container">
+        <div id="patient">
+            <h1>Signup</h1>
+            <form id="patient_form">
+                <label for="patient">Name</label>
+                <input type="text" name="patient" id="patient_name" required>
+                <label for="patient_email">Email</label>
+                <input type="text" name="patient_email" id="patient_email" required>
+                <label for="patient_age">Age</label>
+                <input type="number" id="patient_age" required>
+                <label for="patient_contact">Phone no.</label>
+                <input type="text" id="patient_contact" required>
+                <label for="image">Image</label>
+                <input type="text" id="img" required>
+                <label for="patient_password">Password</label>
+                <input type="password" id="patient_password" required>
+                <input type="submit" value="Signup">
+            </form>
+            <p>SignUp as a <span><button id="doctor_btn" class="btn">Doctor</button></span></p>
+        </div>
+        <div id="doctor">
+            <h1>Signup as a Doctor</h1>
+            <form id="doctor_form">
+                <label for="doctor_name">Name</label>
+                <input type="text" name="doctor_name" id="doctor_name" required>
+                <label for="doctor_email">Email</label>
+                <input type="text" name="doctor_email" id="doctor_email" required>
+                <label for="doctor_age">Age</label>
+                <input type="number" name="doctor_age" id="doctor_age">
+                <label for="contact">Phone no.</label>
+                <input type="text" id="contact" required>
+                <label for="speciality">Speciality</label>
+                <select name="speciality" id="speciality">
+                    <option value="">Choose speciality</option>
+                    <option value="Medicine">Medicine</option>
+                    <option value="Neurology and Neurosurgery">Neurology and Neurosurgery</option>
+                    <option value="Urology">Urology</option>
+                    <option value="Ophthalmology">Ophthalmology</option>
+                    <option value="Psychiatry">Psychiatry</option>
+                    <option value="Radiology">Radiology</option>
+                    <option value="Cardiology">Cardiology</option>
+                    <option value="Pediatrics">Pediatrics</option>
+                </select>
+                <label for="bio">Bio</label>
+                <textarea name="bio" id="bio" cols="30" rows="3" required placeholder="Enter text"></textarea>
+                <label for="image">Image</label>
+                <input type="text" id="img" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+                <input type="submit" value="Signup">
+            </form>
+            <p>SignUp as a <span><button id="patient_btn" class="btn">Patient</button></span></p>
+        </div>
+        <p>Already a user ? <a href="login.html" id="anchor">Login</a></p>
+    </div>
+</body>
+</html>
+
+<script src="./src/user.signup.js"></script>

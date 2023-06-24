@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User</title>
+    <link rel="stylesheet" href="./styles/user.css" />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="patient.html">Book Appointments</a></li>
+        <li><a href="user.appointments.html">Profile</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="userSignup.html">SignUp</a></li>
+      </ul>
+    </nav>
+
+    <section>
+      <div id="container"></div>
+
+      <div id="model">
+        <div class="cross">
+          <p onclick="close_model()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="times"><path fill="black" d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"></path></svg></p>
+        </div>
+        <div id="information">
+
+        </div>
+        <div id="select">
+            <input type="date" name="date" id="date" >
+            <div>
+      
+                <label for="time">Select Slot</label>
+                <select name="time" id="time">
+                    <option value="9:00AM">9:00AM</option>
+                    <option value="10:00AM">10:00AM</option>
+                    <option value="11:00AM">11:00AM</option>
+                    <option value="1:00PM">1:00PM</option>
+                    <option value="2:00PM">2:00PM</option>
+                    <option value="3:00PM">3:00PM</option>
+                    <option value="4:00PM">4:00PM</option>
+                </select>
+            </div>
+        </div>
+        <textarea name="description" id="description" cols="30" rows="4" placeholder="Add Comments" required></textarea>
+        <div id="button_div" >
+           
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
+
+<script src="./src/user.js"></script>
