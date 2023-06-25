@@ -1,4 +1,4 @@
- const socket = io("http://localhost:8080/", {
+ const socket = io("https://pococare-97y0.onrender.com/", {
         transports: ["websocket"]  //to avoid cors
     });
 

@@ -5,7 +5,7 @@ const patient_div = document.getElementById("patient")
 const doctor_div = document.getElementById("doctor")
 const patient_form = document.getElementById("patient_form")
 const doctor_form = document.getElementById("doctor_form")
-const baseurl = "http://localhost:8080"
+const baseurl = "https://pococare-97y0.onrender.com"
 
 
 

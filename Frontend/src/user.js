@@ -2,7 +2,7 @@ let token = JSON.parse(localStorage.getItem("token")) || "";
 console.log(token)
 let doc_email;
 const model = document.getElementById("model");
-const frontend_url  = 'http://127.0.0.1:5500/'
+const frontend_url  = 'https://6498ba4bb48fbc4d11585003--wondrous-basbousa-75ce33.netlify.app/'
 let url;
 let roomId;
 
@@ -11,7 +11,7 @@ if (!token) {
   window.location.href = "login.html";
 }
 
-const baseurl = "http://localhost:8080";
+const baseurl = "https://pococare-97y0.onrender.com";
 getData();
 async function getData() {
   fetch(`${baseurl}/user/doctors`, {
