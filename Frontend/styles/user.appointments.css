@@ -70,10 +70,34 @@ a{
 #appointments{
     width: 60%;
     margin: auto;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
    margin-top: 5%;
+   padding: 1%;
 }
 
 #appointments>h1{
     text-align: center;
+}
+
+.card{
+    /* border: 1px solid red; */
+    height: auto;
+    margin-bottom: 4%;
+    display: flex;
+    width: 100%;
+}
+
+.card-div1{
+  height: 100%;
+  width: 30%;
+  /* border: 1px solid blue; */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.div1-img{
+    border-radius: 50%;
+    object-fit: contain;
 }

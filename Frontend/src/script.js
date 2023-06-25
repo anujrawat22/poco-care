@@ -1,102 +1,116 @@
-// script.js
-const socket = io(); // Connect to the signaling server
-
-// Get the local video and remote video elements
-const localVideo = document.getElementById('localVideo');
-const remoteVideo = document.getElementById('remoteVideo');
-
-let localStream;
-let peerConnection;
-
-// Get access to the local video and audio streams
-navigator.mediaDevices
-  .getUserMedia({ video: true, audio: true })
-  .then((stream) => {
-    localStream = stream;
-    localVideo.srcObject = stream;
-  })
-  .catch((error) => {
-    console.error('Error accessing media devices:', error);
-  });
-
-// Send signaling message to establish a video call
-function sendSignal(message) {
-  socket.emit('signal', message);
-}
-
-// Handle signaling messages received from the server
-socket.on('signal', (message) => {
-  handleSignal(message);
-});
-
-// Handle signaling messages
-function handleSignal(message) {
-  if (message.type === 'offer') {
-    createPeerConnection();
-    peerConnection.setRemoteDescription(new RTCSessionDescription(message));
-
-    // Create and send answer
-    peerConnection
-      .createAnswer()
-      .then((answer) => {
-        peerConnection.setLocalDescription(answer);
-        sendSignal(answer);
-      })
-      .catch((error) => {
-        console.error('Error creating answer:', error);
-      });
-  } else if (message.type === 'answer') {
-    peerConnection.setRemoteDescription(new RTCSessionDescription(message));
-  } else if (message.type === 'candidate') {
-    const candidate = new RTCIceCandidate({
-      sdpMLineIndex: message.label,
-      candidate: message.candidate,
+ const socket = io("http://localhost:8080/", {
+        transports: ["websocket"]  //to avoid cors
     });
-    peerConnection.addIceCandidate(candidate);
-  }
-}
 
-// Create a new RTCPeerConnection
-function createPeerConnection() {
-  peerConnection = new RTCPeerConnection();
+   const page_url = window.location.href
 
-  // Add local stream to the peer connection
-  localStream.getTracks().forEach((track) => {
-    peerConnection.addTrack(track, localStream);
-  });
+   
 
-  // Set up event listeners for ICE candidate and negotiation needed
-  peerConnection.addEventListener('icecandidate', handleICECandidate);
-  peerConnection.addEventListener('negotiationneeded', handleNegotiationNeeded);
-  peerConnection.addEventListener('track', handleTrack);
-}
+    const currentUrl = window.location.href;
+console.log(currentUrl)
+    const url = new URL(currentUrl);
+    const searchParams = new URLSearchParams(url.search);
+    const ROOM_ID = searchParams.get('roomId');
 
-// Handle ICE candidate events
-function handleICECandidate(event) {
-  if (event.candidate) {
-    sendSignal({
-      type: 'candidate',
-      label: event.candidate.sdpMLineIndex,
-      candidate: event.candidate.candidate,
+
+    const videoGrid = document.getElementById('video-grid')
+
+    const myPeer = new Peer();
+
+    const myVideo = document.createElement('video')
+    myVideo.muted = true
+
+    const peers = {}
+    navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
+    }).then(stream => {
+        addVideoStream(myVideo, stream)
+
+        myPeer.on('call', call => {
+            call.answer(stream)
+            const video = document.createElement('video')
+            call.on('stream', userVideoStream => {
+                addVideoStream(video, userVideoStream)
+            })
+        })
+
+        socket.on('user-connected', userId => {
+            connectToNewUser(userId, stream)
+        })
+
+        const toggleVideoButton = document.getElementById('toggle-video-button');
+        toggleVideoButton.addEventListener('click', toggleVideoStream);
+
+        function toggleVideoStream() {
+            const videoTrack = stream.getVideoTracks()[0];
+
+            if (videoTrack.enabled) {
+                videoTrack.enabled = false;
+                myVideo.srcObject.getVideoTracks()[0].enabled = false;
+                toggleVideoButton.innerHTML =  '<i class="uil uil-video-slash"></i>';
+            } else {
+                videoTrack.enabled = true;
+                myVideo.srcObject.getVideoTracks()[0].enabled = true;
+                toggleVideoButton.innerHTML = '<i class="uil uil-video"></i>';
+            }
+        }
+
+        const toggleAudioButton = document.getElementById('toggle-audio-button');
+
+        toggleAudioButton.addEventListener('click', toggleAudio);
+
+        function toggleAudio() {
+            const audioTrack = stream.getAudioTracks()[0];
+
+            if (audioTrack.enabled) {
+                audioTrack.enabled = false;
+                
+                toggleAudioButton.innerHTML = `<i class="uil uil-microphone-slash"></i>`;
+            } else {
+                audioTrack.enabled = true;
+                toggleAudioButton.innerHTML = `<i class="uil uil-microphone"></i>`;
+            }
+        }
+    }).catch((err) => {
+        console.log(err);
     });
-  }
-}
 
-// Handle negotiation needed event
-function handleNegotiationNeeded() {
-  peerConnection
-    .createOffer()
-    .then((offer) => {
-      peerConnection.setLocalDescription(offer);
-      sendSignal(offer);
+
+
+
+
+    socket.on('user-disconnected', userId => {
+        if (peers[userId]) peers[userId].close()
     })
-    .catch((error) => {
-      console.error('Error creating offer:', error);
-    });
-}
 
-// Handle remote tracks being added to the peer connection
-function handleTrack(event) {
-  const stream = event.streams[0];
-  remoteVideo.srcObject = stream;
-}
+    myPeer.on('open', id => {
+        socket.emit('join-room', ROOM_ID, id)
+    })
+
+    function connectToNewUser(userId, stream) {
+        const call = myPeer.call(userId, stream)
+        const video = document.createElement('video')
+        call.on('stream', userVideoStream => {
+            addVideoStream(video, userVideoStream)
+        })
+        call.on('close', () => {
+            video.remove()
+        })
+
+        peers[userId] = call
+    }
+
+    function addVideoStream(video, stream) {
+        video.srcObject = stream
+        video.addEventListener('loadedmetadata', () => {
+            video.play()
+        })
+        videoGrid.append(video)
+    }
+
+
+
+    function redirectToDashboard() {
+        window.location.href = './patient.html';
+    }
