@@ -1,20 +1,24 @@
-const { UserModel } = require("../models/user.model");
+
 const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { UserModel } = require("../models/user.model");
+
+
 exports.register = async (req, res) => {
   try {
     const {
       name,
       email,
       password,
+      gender,
       role,
       age,
       contact_info,
       specialties,
       availability,
       bio,
+      img
     } = req.body;
-
     const findUser = await UserModel.findOne({ email });
 
     if (findUser) {
@@ -27,16 +31,18 @@ exports.register = async (req, res) => {
       if (err) {
         return res.status(401).json({ Error: err });
       }
-      console.log(role)
+      
 
       if (role == "patient" || role == "admin") {
         const User = await new UserModel({
           name,
           email,
           password: hash,
+          gender,
           role,
           age,
           contact_info,
+          img
         });
         User.save();
         res.status(201).json({ msg: "User registered successfully" });
@@ -47,10 +53,12 @@ exports.register = async (req, res) => {
           password: hash,
           role,
           age,
+          gender,
           contact_info,
           specialties,
           availability,
           bio,
+          img
         });
         User.save();
         res.status(201).json({ msg: "User registered successfully" });
@@ -80,8 +88,8 @@ exports.login = async (req, res) => {
 
     if(result){
         const token =  jwt.sign({ userId: User._id,role : User.role, name : User.name }, process.env.privatekey, { expiresIn: '7d' } );
-        res.cookie('token' , token , {httpOnly : true , maxAge : 3600000})
-        res.status(201).json({msg : 'User logged in successfully'})
+        res.cookie('token' , token)
+        res.status(201).json({msg : 'User logged in successfully',token,role : User.role})
     }else{
         res.status(401).json({msg : "Invalid Credentials"})
     }
@@ -93,3 +101,66 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
+
+
+exports.UserData = async(req,res)=>{
+    try {
+        const id = req.userId
+        console.log(id)
+        const data = await UserModel.findOne({_id : id})
+       
+        res.status(201).json({data})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+
+exports.doctors = async(req,res)=>{
+    try {
+        const doctors = await UserModel.find({role : 'doctor'})
+        res.status(201).json({doctors})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+
+exports.user = async(req,res)=>{
+  try {
+    const {id}  = req.params
+    console.log('id' , id)
+    const user = await UserModel.findOne({_id : id})
+    res.status(201).send({
+      msg : "Data",user
+    })
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
+
+exports.updateUser = async(req,res)=>{
+  try {
+    const payload = req.body;
+    const id = req.userId;
+    const user = await UserModel.findOne({_id  :id})
+    if(user){
+      await UserModel.findOneAndUpdate({_id: id},{
+        $set : payload
+      })
+      res.status(204).send({msg : "Details Updated"})
+    }else{
+      res.status(404).send({msg : "User not"})
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
