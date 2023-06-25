@@ -39,6 +39,7 @@ async function patientSignup(e){
     age : +form.patient_age.value,
     contact_info : form.patient_contact.value,
     password : form.patient_password.value,
+    gender : form.user_gender.value,
     img : form.img.value,
     role : 'patient'
  }
@@ -71,6 +72,7 @@ const body = {
     specialties : form.speciality.value,
     bio : form.bio.value,
     img : form.img.value,
+    gender : form.doc_gender.value,
     password : form.password.value,
     role : 'doctor'
 }
