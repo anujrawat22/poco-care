@@ -155,6 +155,7 @@ async function book_appointment(item) {
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data)
       if (data.msg == "Appointment created") {
         alert("Appointment created successfully");
         close_model();
@@ -198,3 +199,5 @@ async function send_email(id){
   .then(data => console.log(data))
   .catch(err => console.log(err))
 }
+
+

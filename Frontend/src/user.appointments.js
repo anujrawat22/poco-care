@@ -4,7 +4,7 @@ if (!token) {
   alert("Please Login");
   window.location.href = "login.html";
 }
-console.log(token);
+
 getUserInfo();
 async function getUserInfo() {
   fetch(`${baseurl}/user/data`, {
@@ -83,13 +83,13 @@ function displayAppointments(data) {
     const div1 = document.createElement("div");
     div1.className = "card-div1";
     const img = document.createElement("img")
-    img.src = docData.doctor.img
+    img.src = docData.user.img
 img.className = 'div1-img'
     div1.append(img)
     const div2 = document.createElement("div");
     div2.className = "card-div2";
     const doc = document.createElement("h2");
-    doc.innerText = "doc";
+    doc.innerText = docData.user.name;
     const date = document.createElement("p");
     date.innerText = `Date - ${item.date.split("T")[0]}`;
     const start = document.createElement("p");
@@ -101,11 +101,15 @@ img.className = 'div1-img'
     div3.className = "card-div3";
     const status = document.createElement("p");
     status.innerText = item.status;
-
+    if(item.status == 'scheduled'){
+        status.style.color = 'green'
+      }else{
+        status.style.color = 'red'
+      }
     div3.append(status);
     if (item.status == "scheduled") {
       const cancel = document.createElement("button");
-      cancel.innerText = "Cancel Appointment";
+      cancel.innerText = "Cancel";
       cancel.className = "cancel";
       cancel.addEventListener("click", () => {
         cancel_appointment(item._id);
@@ -153,7 +157,7 @@ async function delete_appointment(id) {
   }
 
 async function get_docData(id){
-    console.log(id)
+    
   const res = await fetch(`${baseurl}/user/userData/${id}`,{
     headers : {
         authorization : `bearer ${token}`

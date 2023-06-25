@@ -28,6 +28,7 @@ console.log(body)
    const token = data.token
    const role = data.role
    localStorage.setItem("token" , JSON.stringify(token))
+   localStorage.setItem("role",JSON.stringify(role))
    if(token && role == 'patient'){
     window.location.href = "patient.html"
    }else if(token && role == 'doctor'){

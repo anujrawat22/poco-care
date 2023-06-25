@@ -78,7 +78,7 @@ const body = {
     availability : "available"
 }
 
-console.log(body)
+
  const res = await fetch(`${baseurl}/user/register`,{
     method : "POST",
     body : JSON.stringify(body),
@@ -88,6 +88,7 @@ console.log(body)
  })
 const data =await res.json()
 if(data.msg=="User registered successfully"){
+    alert("SignUp successful")
     window.location.href = "login.html"
 }else{
     alert(data.msg)
