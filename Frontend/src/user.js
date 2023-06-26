@@ -2,7 +2,7 @@ let token = JSON.parse(localStorage.getItem("token")) || "";
 console.log(token)
 let doc_email;
 const model = document.getElementById("model");
-const frontend_url  = 'https://6498ba4bb48fbc4d11585003--wondrous-basbousa-75ce33.netlify.app/'
+const frontend_url  = 'https://poco-care.vercel.app//'
 let url;
 let roomId;
 
